@@ -7,13 +7,12 @@ module LightService
 
     module Macros
       def executed
-        define_singleton_method "execute" do |context|
+        eigenclass = class << self; self end
+        eigenclass.send(:define_method, :execute, lambda do |context|
           return context if context.failure?
-
           yield(context)
-
           context
-        end
+        end)
       end
     end
 
